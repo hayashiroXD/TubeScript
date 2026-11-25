@@ -11,11 +11,23 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-export JAVA_HOME="${JAVA_HOME:-$HOME/.local/opt/jdk17}"
-export ANDROID_HOME="${ANDROID_HOME:-$HOME/Android/Sdk}"
-export ANDROID_SDK_ROOT="$ANDROID_HOME"
-export NDK_HOME="${NDK_HOME:-$(ls -d "$ANDROID_HOME"/ndk/* 2>/dev/null | head -n 1)}"
-export PATH="$HOME/.local/opt/node/bin:$PATH"
+
+# Taşınabilir varsayılanlar: yalnızca ortam değişkeni boşsa ve yerel kurulum varsa kullan.
+if [ -z "${JAVA_HOME:-}" ] && [ -x "$HOME/.local/opt/jdk17/bin/java" ]; then
+  export JAVA_HOME="$HOME/.local/opt/jdk17"
+fi
+if [ -z "${ANDROID_HOME:-}" ]; then
+  for d in "$HOME/Android/Sdk" "$HOME/android-sdk" "/opt/android-sdk"; do
+    [ -d "$d" ] && export ANDROID_HOME="$d" && break
+  done
+fi
+export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-$ANDROID_HOME}"
+if [ -z "${NDK_HOME:-}" ] && [ -n "${ANDROID_HOME:-}" ]; then
+  export NDK_HOME="$(ls -d "$ANDROID_HOME"/ndk/* 2>/dev/null | sort -V | tail -n 1)"
+fi
+[ -d "$HOME/.local/opt/node/bin" ] && export PATH="$HOME/.local/opt/node/bin:$PATH"
+
+: "${ANDROID_HOME:?ANDROID_HOME bulunamadı (Android SDK yolunu ayarla)}"
 
 KEY_PASS="${TUBESCRIPT_KEY_PASS:-tubescript}"
 KEYSTORE="$ROOT/keystore/tubescript.jks"
