@@ -1,0 +1,23 @@
+node_modules/
+src-tauri/target/
+
+# Android build çıktıları / yerel ayarlar
+src-tauri/gen/android/.gradle/
+src-tauri/gen/android/build/
+src-tauri/gen/android/app/build/
+src-tauri/gen/android/local.properties
+src-tauri/gen/android/keystore.properties
+src-tauri/gen/android/app/src/main/jniLibs/
+src-tauri/gen/schemas/
+src-tauri/gen/android/app/src/main/assets/tauri.conf.json
+
+# İmza anahtarı ve paketler
+keystore/
+*.jks
+*.keystore
+*.apk
+*.aab
+
+.DS_Store
+.idea/
+*.log

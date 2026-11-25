@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f0f0f" />
+  <title>TubeScript</title>
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5z" fill="currentColor" opacity=".18"/><path d="M10 8.4v7.2l6-3.6z" fill="currentColor"/></svg>
+        </span>
+        <div class="brand-text">
+          <strong>TubeScript</strong>
+          <small>m.youtube.com · userscript</small>
+        </div>
+      </div>
+      <button class="btn btn-red" id="btn-open-top">Aç</button>
+    </header>
+
+    <main class="content" id="content">
+      <!-- ANA SAYFA -->
+      <section class="page is-active" data-page="home">
+        <div class="hero">
+          <div class="hero-glow"></div>
+          <span class="badge">microG uyumlu · GMS gerekmez</span>
+          <h1>YouTube, <span>senin kurallarınla.</span></h1>
+          <p>Gerçek <code>m.youtube.com</code> arayüzü, içine gömülü bir userscript motoru ve YouTube görünümünü bozmayan kozmetik filtreler.</p>
+          <div class="hero-actions">
+            <button class="btn btn-red btn-lg" id="btn-open-hero">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              YouTube'u Başlat
+            </button>
+            <button class="btn btn-ghost btn-lg" id="btn-new-hero">Userscript ekle</button>
+          </div>
+
+          <form class="search" id="search-form" autocomplete="off">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4a6 6 0 1 0 3.5 10.9l4.3 4.3 1.4-1.4-4.3-4.3A6 6 0 0 0 10 4m0 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8" fill="currentColor"/></svg>
+            <input id="search-input" placeholder="m.youtube.com'da ara" />
+            <button type="submit" class="btn btn-red">Ara</button>
+          </form>
+        </div>
+
+        <div class="chips" id="home-chips"></div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon red">YT</div>
+            <h3>Gerçek YouTube arayüzü</h3>
+            <p>Kabuk yok: YouTube'un kendi mobil arayüzü açılır, üzerine sadece senin script'lerin ve ince ayarların biner.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon blue">JS</div>
+            <h3>Userscript motoru</h3>
+            <p><code>GM_addStyle</code>, <code>GM_getValue</code>, <code>GM_xmlhttpRequest</code> ve daha fazlası. Script'leri uygulama içinden yaz, düzenle, aç/kapat.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon green">μG</div>
+            <h3>microG ile sorunsuz</h3>
+            <p>Google Play Services'e hiç dokunmaz. microG kurulu, GMS'siz cihazlarda da aynı şekilde çalışır.</p>
+          </article>
+        </div>
+
+        <div class="card list-card" id="home-status"></div>
+      </section>
+
+      <!-- USERSCRIPTLER -->
+      <section class="page" data-page="scripts">
+        <div class="page-head">
+          <div>
+            <h2>Userscriptler</h2>
+            <p class="muted" id="scripts-sub">Yükleniyor…</p>
+          </div>
+          <button class="btn btn-red btn-icon" id="btn-new-script" title="Yeni script">+</button>
+        </div>
+        <div class="script-list" id="script-list"></div>
+        <div class="preset-row" id="preset-row"></div>
+        <form class="install-row" id="install-form" autocomplete="off">
+          <input id="install-url" placeholder="https://greasyfork.org/.../code/....user.js" />
+          <button type="submit" class="btn btn-red">Kur</button>
+        </form>
+        <p class="hint">Script'ler <code>m.youtube.com</code> sayfalarına 1.2 sn içinde enjekte edilir. Kaydettikten sonra YouTube sekmesini yenile.</p>
+      </section>
+
+      <!-- AYARLAR -->
+      <section class="page" data-page="settings">
+        <div class="page-head">
+          <div>
+            <h2>Ayarlar</h2>
+            <p class="muted">Görünüm ve enjeksiyon davranışı</p>
+          </div>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Görünüm filtreleri</div>
+          <label class="row">
+            <span><strong>Reklam temizliği</strong><small>Reklam ve promosyon kartlarını gizle</small></span>
+            <input type="checkbox" class="switch" data-setting="adblock" />
+          </label>
+          <label class="row">
+            <span><strong>Shorts'u gizle</strong><small>Raf ve sekme görünmez olur</small></span>
+            <input type="checkbox" class="switch" data-setting="hideShorts" />
+          </label>
+          <label class="row">
+            <span><strong>Ana akışı sadeleştir</strong><small>Chip çubuğu ve zengin bölümler</small></span>
+            <input type="checkbox" class="switch" data-setting="hideHomeFeed" />
+          </label>
+          <label class="row">
+            <span><strong>Yorumları gizle</strong><small>Video altı yorum bölümü</small></span>
+            <input type="checkbox" class="switch" data-setting="hideComments" />
+          </label>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Uygulama</div>
+          <label class="row">
+            <span><strong>Yüzen ayar düğmesi</strong><small>YouTube üzerinde ⚙ ve ⟳ düğmeleri</small></span>
+            <input type="checkbox" class="switch" data-setting="injectFab" />
+          </label>
+          <button class="row row-button" id="btn-reload-yt">
+            <span><strong>YouTube'u yeniden yükle</strong><small>Açık sayfaya filtreleri tekrar uygula</small></span>
+            <span class="chev">›</span>
+          </button>
+          <button class="row row-button danger" id="btn-reset">
+            <span><strong>Script'leri sıfırla</strong><small>Varsayılan örneklere döner</small></span>
+            <span class="chev">›</span>
+          </button>
+        </div>
+
+        <div class="group">
+          <div class="group-title">Hakkında</div>
+          <div class="row static">
+            <span><strong>TubeScript 1.0.0</strong><small>Tauri 2 · Android WebView</small></span>
+          </div>
+          <div class="row static">
+            <span><strong>Yerel köken</strong><small id="origin-label">—</small></span>
+          </div>
+          <div class="row static">
+            <span><strong>Google Play Services</strong><small>Kullanılmaz · microG ile uyumlu</small></span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <nav class="bottomnav">
+      <button class="nav-item is-active" data-nav="home">
+        <svg viewBox="0 0 24 24"><path d="M12 3 3 10v11h6v-7h6v7h6V10z" fill="currentColor"/></svg>
+        <span>Ana</span>
+      </button>
+      <button class="nav-item" data-nav="scripts">
+        <svg viewBox="0 0 24 24"><path d="m8 5-6 7 6 7 1.6-1.4L4.4 12 9.6 6.4zM16 5l-1.6 1.4L19.6 12l-5.2 5.6L16 19l6-7z" fill="currentColor"/></svg>
+        <span>Script'ler</span>
+      </button>
+      <button class="nav-item" data-nav="settings">
+        <svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8m9 4a9 9 0 0 0-.2-1.8l2-1.6-2-3.4-2.4 1a9 9 0 0 0-3-1.8L15 2H9l-.4 2.4a9 9 0 0 0-3 1.8l-2.4-1-2 3.4 2 1.6a9 9 0 0 0 0 3.6l-2 1.6 2 3.4 2.4-1a9 9 0 0 0 3 1.8L9 22h6l.4-2.4a9 9 0 0 0 3-1.8l2.4 1 2-3.4-2-1.6c.1-.6.2-1.2.2-1.8" fill="currentColor"/></svg>
+        <span>Ayarlar</span>
+      </button>
+    </nav>
+  </div>
+
+  <dialog id="editor" class="sheet">
+    <form method="dialog" class="sheet-body" id="editor-form">
+      <div class="sheet-head">
+        <h3 id="editor-title">Yeni userscript</h3>
+        <button type="button" class="btn btn-ghost btn-icon" id="editor-close">✕</button>
+      </div>
+      <input type="hidden" id="f-id" />
+      <label class="field">
+        <span>Ad</span>
+        <input id="f-name" placeholder="Örn. Shorts Rafını Gizle" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Eşleşme kalıpları <em>(virgülle ayır)</em></span>
+        <input id="f-matches" placeholder="https://m.youtube.com/*" autocomplete="off" />
+      </label>
+      <label class="field">
+        <span>Kod</span>
+        <textarea id="f-code" spellcheck="false" placeholder="GM.addStyle('body{background:#000}');"></textarea>
+      </label>
+      <label class="row inline">
+        <span><strong>Etkin</strong><small>Kaydettiğinde hemen enjekte edilir</small></span>
+        <input type="checkbox" class="switch" id="f-enabled" checked />
+      </label>
+      <div class="sheet-actions">
+        <button type="button" class="btn btn-ghost danger" id="editor-delete">Sil</button>
+        <button type="button" class="btn btn-red" id="editor-save">Kaydet</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

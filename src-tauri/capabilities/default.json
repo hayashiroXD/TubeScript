@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/mobile-schema.json",
+  "identifier": "default",
+  "description": "TubeScript ana yetkileri",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}

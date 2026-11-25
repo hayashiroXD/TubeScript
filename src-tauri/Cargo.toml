@@ -1,0 +1,29 @@
+[package]
+name = "tubescript"
+version = "1.1.0"
+description = "TubeScript - YouTube mobile + userscript engine"
+authors = ["Hayashiro"]
+license = "Apache-2.0"
+repository = "https://github.com/hayashiroXD/TubeScript"
+homepage = "https://github.com/hayashiroXD/TubeScript"
+edition = "2021"
+
+[lib]
+name = "tubescript_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
+
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = "thin"
+opt-level = "s"
+strip = true
